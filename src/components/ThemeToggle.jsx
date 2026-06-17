@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
-import AppRoutes from "./routes/AppRoutes";
 
-function App() {
+function ThemeToggle() {
   const [darkMode, setDarkMode] = useState(
     localStorage.getItem("theme") === "dark"
   );
@@ -17,13 +16,13 @@ function App() {
   }, [darkMode]);
 
   return (
-    <>
-      <AppRoutes
-        darkMode={darkMode}
-        setDarkMode={setDarkMode}
-      />
-    </>
+    <button
+      onClick={() => setDarkMode(!darkMode)}
+      className="px-4 py-2 rounded-lg bg-green-700 text-white"
+    >
+      {darkMode ? "☀ Light" : "🌙 Dark"}
+    </button>
   );
 }
 
-export default App;
+export default ThemeToggle;
