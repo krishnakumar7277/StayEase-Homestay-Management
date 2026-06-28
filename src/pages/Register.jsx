@@ -2,12 +2,13 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-import { loginUser } from "../api/authApi";
+import { registerUser } from "../api/registerApi";
 
-function Login() {
+function Register() {
 const navigate = useNavigate();
 
 const [formData, setFormData] = useState({
+name: "",
 email: "",
 password: "",
 });
@@ -22,33 +23,18 @@ setFormData({
 const handleSubmit = async (e) => {
 e.preventDefault();
 
-
 try {
-  const data = await loginUser(formData);
+  await registerUser(formData);
 
-  localStorage.setItem(
-    "token",
-    data.token
-  );
+  alert("Registration Successful");
 
-  localStorage.setItem(
-    "user",
-    JSON.stringify(data.user)
-  );
-
-  alert("Login Successful");
-
-  navigate("/dashboard");
+  navigate("/login");
 } catch (error) {
-  console.log(error);
-
   alert(
-    JSON.stringify(
-      error.response?.data || error.message
-    )
+    error.response?.data?.message ||
+    "Registration Failed"
   );
 }
-
 
 };
 
@@ -62,13 +48,21 @@ return (
       className="bg-white p-8 rounded-xl shadow-lg w-full max-w-md"
     >
       <h1 className="text-3xl font-bold mb-6 text-center">
-        Login
+        Create Account
       </h1>
+
+      <input
+        type="text"
+        name="name"
+        placeholder="Full Name"
+        className="w-full border p-3 mb-4 rounded-lg"
+        onChange={handleChange}
+      />
 
       <input
         type="email"
         name="email"
-        placeholder="Enter Email"
+        placeholder="Email"
         className="w-full border p-3 mb-4 rounded-lg"
         onChange={handleChange}
       />
@@ -76,7 +70,7 @@ return (
       <input
         type="password"
         name="password"
-        placeholder="Enter Password"
+        placeholder="Password"
         className="w-full border p-3 mb-4 rounded-lg"
         onChange={handleChange}
       />
@@ -85,7 +79,7 @@ return (
         type="submit"
         className="w-full bg-green-700 text-white py-3 rounded-lg"
       >
-        Login
+        Register
       </button>
     </form>
 
@@ -93,8 +87,7 @@ return (
 
   <Footer />
 </>
-
 );
 }
 
-export default Login;
+export default Register;
